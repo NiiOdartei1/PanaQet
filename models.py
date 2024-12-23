@@ -1,7 +1,6 @@
 import sqlite3
 from flask_login import UserMixin
 from flask import current_app
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import SubmitField
 from database import db
@@ -50,17 +49,6 @@ class User(UserMixin, db.Model):
                 seller.location = new_location
                 db.session.commit()
     
-    def generate_confirmation_token(self, expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'confirm': self.id}).decode('utf-8')
-    
-    def confirm_email_token(self, token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except Exception:
-            return False
-        return User.query.get(data['confirm'])
 
 #password="kcdg qfpj ibed talg"
 class Product(db.Model):
