@@ -86,11 +86,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create the SQLite database file and tables
 
-    # Start Flask in a separate thread with host set to 0.0.0.0
-    from threading import Thread
-    flask_thread = Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000, 'debug': False, 'use_reloader': False})
-    flask_thread.start()
-
-    # Open the web application in the default browser
-    import webbrowser
-    webbrowser.open('http://127.0.0.1:5000')
+    # Start the Flask application directly without threading
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
