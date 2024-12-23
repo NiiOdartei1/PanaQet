@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/' + current_user.user_theme + '.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('routes.index') }}">
+                <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo" style="height: 40px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'buyer' %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('buyer_routes.buyer_dashboard') }}">Buyer Dashboard</a></li>
+                        {% elif current_user.role == 'seller' %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('seller_routes.seller_dashboard') }}">Seller Dashboard</a></li>
+                        {% elif current_user.role == 'admin' %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_routes.admin_dashboard') }}">Admin Dashboard</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.marketplace') }}">Marketplace</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.settings') }}">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.logout') }}">Logout</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.signup') }}">Signup</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h1>Settings</h1>
+        <form method="post" action="{{ url_for('routes.change_theme') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.theme.label }} {{ form.theme() }}
+            </div>
+            <div class="form-group">
+                {{ form.submit() }}
+            </div>
+        </form>        
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('theme').addEventListener('change', function() {
+            const theme = this.value;
+            const themeLink = document.getElementById('theme-style');
+            themeLink.href = `/static/css/${theme}.css`;
+        });
+    </script>
+</body>
+</html>

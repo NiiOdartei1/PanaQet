@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>PanaQet - Home</title>
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>Welcome to PanaQet</h1>
+        <p class="lead">Discover and sell products and services online.</p>
+        <hr class="my-4">
+        <p>Join us today to start buying and selling!</p>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('routes.signup') }}" role="button">Signup Now</a>
+        <a class="btn btn-success btn-lg" href="{{ url_for('routes.login') }}" role="button">Login</a>
+    </div>
+
+    <section class="trending-section">
+        <div class="container">
+            <h2 class="section-title text-center mb-4">Trending Products and Services</h2>
+            <div class="row justify-content-center">
+                <!-- Example Trending Product/Service Item -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='icon.png') }}" alt="Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Product Name</h5>
+                            <p class="card-text">Description of the product or service.</p>
+                            <a href="#" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for more products/services -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer bg-light text-center py-3">
+        <div class="container">
+            <p class="text-muted mb-0">© 2024 PanaQet. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

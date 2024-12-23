@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <!-- Bootstrap 5.3.0 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            margin-bottom: 40px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar:hover {
+            background-color: #007bff;
+        }
+
+        .navbar-nav .nav-link {
+            padding: 10px 15px;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+
+        .product-img-container img {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            max-height: 500px;
+        }
+
+        .product-img-container .carousel {
+            max-height: 500px;
+            overflow: hidden;
+        }
+
+        .product-img-container .carousel img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Position the QR code in the upper right */
+        .qr-code {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: center;
+        }
+
+        .qr-code-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: center;
+        }
+
+        .qr-code-wrapper img {
+            max-width: 150px; /* Increase size */
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .product-details {
+            position: relative; /* Set relative positioning for QR code placement */
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-details h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .product-details p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .price {
+            color: #28a745;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Additional styles for narrower input fields */
+        .narrow-input {
+            max-width: 200px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            font-size: 1.1rem;
+            max-width: 200px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .form-select,
+        .form-control {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .product-details {
+                padding: 20px;
+            }
+
+            .product-details h3 {
+                font-size: 1.5rem;
+            }
+
+            .price {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            /* Adjust Navbar */
+            .navbar {
+                padding: 10px;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 0.9rem;
+            }
+
+            .product-img-container img {
+                max-height: 400px; /* Reduce image size on smaller screens */
+            }
+
+            /* Adjust Product Details Section */
+            .product-details {
+                padding: 15px;
+            }
+
+            .product-details h3 {
+                font-size: 1.4rem;
+            }
+
+            .price {
+                font-size: 1.4rem;
+            }
+
+            /* Adjust Form Inputs */
+            .form-select .form-control {
+                font-size: 1rem;
+            }
+
+            /* Adjust button size */
+            .btn-primary {
+                font-size: 1rem;
+            }
+
+            /* Adjust QR code size */
+            .qr-code-wrapper img {
+                max-width: 120px; /* Smaller QR code */
+            }
+        }
+
+        /* Additional media query for smaller screens (iPhone SE and similar devices) */
+        @media only screen and (max-width: 375px) {
+            .navbar {
+                padding: 8px;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 0.8rem;
+            }
+
+            .product-details h3 {
+                font-size: 1.2rem;
+            }
+
+            .price {
+                font-size: 1.2rem;
+            }
+
+            .form-select,
+            .form-control {
+                font-size: 0.9rem;
+            }
+
+            .btn-primary {
+                font-size: 1rem;
+            }
+
+            .product-img-container img {
+                max-height: 350px;
+            }
+
+            .qr-code-wrapper img {
+                max-width: 100px;
+            }
+        }
+
+        /* For devices with a width less than or equal to 768px (common for most smartphones, including Android) */
+        @media only screen and (max-width: 768px) {
+            /* Adjust Navbar */
+            .navbar {
+                padding: 10px;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 0.9rem;
+            }
+
+            .product-img-container img {
+                max-height: 400px; /* Reduce image size on smaller screens */
+            }
+
+            /* Adjust Product Details Section */
+            .product-details {
+                padding: 15px;
+            }
+
+            .product-details h3 {
+                font-size: 1.4rem;
+            }
+
+            .price {
+                font-size: 1.4rem;
+            }
+
+            /* Adjust Form Inputs */
+            .form-select,
+            .form-control {
+                font-size: 1rem;
+            }
+
+            /* Adjust button size */
+            .btn-primary {
+                font-size: 1rem;
+            }
+
+            /* Adjust QR code size */
+            .qr-code-wrapper img {
+                max-width: 120px; /* Smaller QR code */
+            }
+        }
+
+        /* For smaller Android screens, such as the Android devices with 360px width (e.g., Galaxy S5, Nexus 5) */
+        @media only screen and (max-width: 360px) {
+            .navbar {
+                padding: 8px;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 0.8rem;
+            }
+
+            .product-details h3 {
+                font-size: 1.3rem;
+            }
+
+            .price {
+                font-size: 1.3rem;
+            }
+
+            .form-select,
+            .form-control {
+                font-size: 0.9rem;
+            }
+
+            .btn-primary {
+                font-size: 1rem;
+            }
+
+            .product-img-container img {
+                max-height: 350px;
+            }
+
+            .qr-code-wrapper img {
+                max-width: 100px; /* Smaller QR code */
+            }
+        }
+
+        /* For very small Android screens like older devices with 320px width (e.g., older Galaxy models) */
+        @media only screen and (max-width: 320px) {
+            .navbar {
+                padding: 6px;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 0.7rem;
+            }
+
+            .product-details h3 {
+                font-size: 1.2rem;
+            }
+
+            .price {
+                font-size: 1.2rem;
+            }
+
+            .form-select,
+            .form-control {
+                font-size: 0.8rem;
+            }
+
+            .btn-primary {
+                font-size: 0.9rem;
+            }
+
+            .product-img-container img {
+                max-height: 300px;
+            }
+
+            .qr-code-wrapper img {
+                max-width: 80px; /* Smaller QR code */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('routes.index') }}">
+                <img src="{{ url_for('static', filename='icon.png') }}" alt="Logo" style="height: 40px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('routes.marketplace') }}">
+                            <i class="fas fa-store-alt me-1"></i> Marketplace
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('buyer_routes.cart') }}">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Cart <span id="cart-count" class="badge bg-primary rounded-pill">{{ cart_count }}</span>
+                        </a>
+                    </li>                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Details Section -->
+    <div class="container mb-5">
+        <div class="product-details">
+            <div class="row">
+                <!-- Product Image -->
+                <div class="col-md-5">
+                    <div class="product-img-container">
+                        {% if product.images %}
+                            <div id="productImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    {% for img in product.images %}
+                                        {% set image_path = img.image_url.replace('\\', '/') %}
+                                        {% if image_path.startswith('static/') %}
+                                            {% set image_path = image_path[7:] %}
+                                        {% endif %}
+                                        <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                                            <img src="{{ url_for('static', filename=image_path) }}" alt="Product Image" class="d-block w-100">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% if product.images|length > 1 %}
+                                    <a class="carousel-control-prev" href="#productImagesCarousel" role="button" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#productImagesCarousel" role="button" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <img src="{{ url_for('static', filename='default_image.jpg') }}" alt="No Image Available" class="img-fluid">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Product Information and Actions -->
+                <div class="col-md-5 mt-4 mt-md-0 position-relative">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <div class="price">₵{{ product.price | round(2) }}</div>
+                    <ul class="list-unstyled">
+                        {% if product.category %}
+                            <li><strong>Category:</strong> {{ product.category }}</li>
+                        {% endif %}
+                        {% if product.location %}
+                            <li><strong>Location:</strong> {{ product.location }}</li>
+                        {% endif %}
+                        {% if product.condition %}
+                            <li><strong>Condition:</strong> {{ product.condition }}</li>
+                        {% endif %}
+                        {% if product.brand %}
+                            <li><strong>Brand:</strong> {{ product.brand }}</li>
+                        {% endif %}
+                        {% if product.gender %}
+                            <li><strong>Gender:</strong> {{ product.gender }}</li>
+                        {% endif %}
+                        {% if product.type %}
+                            <li><strong>Type:</strong> {{ product.type }}</li>
+                        {% endif %}
+                        {% if product.color %}
+                            <li><strong>Color:</strong> {{ product.color }}</li>
+                        {% endif %}
+                        {% if product.size %}
+                            <li><strong>Size:</strong> {{ product.size }}</li>
+                        {% endif %}
+                    </ul>
+
+                    <!-- Save to Wishlist Button - Only for Buyers -->
+                    {% if current_user.role == 'buyer' %}
+                        <button class="btn btn-outline-primary save-to-wishlist-btn" 
+                            data-product-id="{{ product.id }}">
+                                Save to Wishlist
+                        </button>
+                    {% endif %}
+
+                    <!-- Add to Cart Button - Only for Buyers -->
+                    {% if current_user.role == 'buyer' %}
+                        {% if product.is_package %}
+                            <form action="{{ url_for('buyer_routes.add_to_cart', product_id=product.id) }}" method="post">
+                                {{ form.hidden_tag() }}
+                                <div class="mb-3">
+                                    <label for="components" class="form-label">Select Components:</label>
+                                    <select id="components" name="components" class="form-select" multiple required>
+                                        {% for component in product.components %}
+                                            <option value="{{ component.id }}">{{ component.name }} - ₵{{ component.price | round(2) }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="form-text">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple options.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quantities" class="form-label">Quantities:</label>
+                                    <input type="text" id="quantities" name="quantities" class="form-control" placeholder="e.g., 1,2,1" required>
+                                    <div class="form-text">Enter comma-separated quantities for each component.</div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 add-to-cart-btn">Add to Cart</button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for('buyer_routes.add_to_cart', product_id=product.id) }}" method="POST" class="mt-4">
+                                {{ form.hidden_tag() }}
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label">Quantity:</label>
+                                    <input type="number" id="quantity" name="quantity" class="form-control narrow-input" value="{{ request.form.get('quantity', 1) }}" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="delivery_location" class="form-label">Delivery Location:</label>
+                                    <input type="text" id="delivery_location" name="delivery_location" class="form-control narrow-input" placeholder="Enter delivery location" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- QR Code positioned at top-right -->
+            {% if product.qr_code %}
+                <img src="{{ product.qr_code }}" alt="QR Code for {{ product.name }}" style="position: absolute; top: 0; right: 0; width: 150px; height: 150px;">
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3.0 JS and Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                const formData = new FormData(form);
+    
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrf_token')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('cart-count').textContent = data.cart_count;
+                        alert('Product added to cart!');
+                    } else {
+                        alert('Failed to add product to cart.');
+                    }
+                });
+            });
+        });
+
+        // Add Save Button Handling
+        document.querySelectorAll('.save-to-wishlist-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
+                fetch(`/wishlist/save/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</body>
+</html>

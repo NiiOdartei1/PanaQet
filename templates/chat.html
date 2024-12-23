@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Chat with {{ seller.username }}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .chat-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .message {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
+        }
+
+        .message:last-child {
+            border-bottom: none;
+        }
+
+        .message-buyer {
+            text-align: right;
+        }
+
+        .message-seller {
+            text-align: left;
+        }
+
+        .message-content {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .message-buyer .message-content {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .message-seller .message-content {
+            background-color: #f0f0f0;
+            color: black;
+        }
+
+        /* Ensure the watermark stays independent of other elements */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            pointer-events: none;
+            width: 50%;
+            max-width: 500px;
+            /* Adjust z-index if needed */
+            z-index: -1; 
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('routes.index') }}">Your Site</a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('routes.marketplace') }}">Marketplace</a>
+            </li>
+        </ul>
+    </div>
+</nav>    
+
+<div class="container chat-container">
+    <h3>Chat with {{ seller.username }}</h3>
+    <div id="chatMessages">
+        {% for message in messages %}
+            <div class="message {% if message.sender_id == current_user.id %}message-buyer{% else %}message-seller{% endif %}">
+                <div class="message-content">{{ message.content }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <form method="POST" action="{{ url_for('start_chat', seller_id=seller.id) }}">
+        <div class="input-group mt-3">
+            <input type="text" name="message" class="form-control" placeholder="Type your message here...">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Send</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Watermark Image -->
+<img src="{{ url_for('static', filename='icon.png') }}" alt="Watermark" class="watermark">
+
+</body>
+</html>
