@@ -86,15 +86,13 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create the SQLite database file and tables
 
-    # Run the Flask app using a webview window
-    window = webview.create_window('PanaQet', 'http://127.0.0.1:5000')
-    
-    # Start Flask in a separate thread and pywebview in the main thread
+    # Start Flask in a separate thread with debug=False for production
     from threading import Thread
-    flask_thread = Thread(target=app.run, kwargs={'debug': True, 'use_reloader': False})
+    flask_thread = Thread(target=app.run, kwargs={'debug': False, 'use_reloader': False})
     flask_thread.start()
 
     # Open the web application in the default browser
+    import webbrowser
     webbrowser.open('http://127.0.0.1:5000')
 
     # Start pywebview
